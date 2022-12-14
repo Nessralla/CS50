@@ -23,4 +23,4 @@ Web Application Pages
 
 
 Database
-    - table clientes with 
+    - table clientes
