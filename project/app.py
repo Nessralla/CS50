@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 # Load database
 
-connection = sqlite3.connect('database.db')
+connection = sqlite3.connect('database.db',check_same_thread=False)
 
 cur = connection.cursor()
 
@@ -52,7 +52,7 @@ def login():
             return render_template('error.html',msg='Must provide password')        
 
         # Query database for username
-        rowsX = cur.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        rowsX = cur.execute("SELECT * FROM users WHERE username = ?", (request.form.get("username"),))
         print(rowsX)
 
         # Ensure username exists and password is correct
