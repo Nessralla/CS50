@@ -53,15 +53,19 @@ def login():
 
         # Query database for username
         rowsX = cur.execute("SELECT * FROM users WHERE username = ?", (request.form.get("username"),))
-        print(rowsX)
+        print(rowsX.arraysize)
+        user = rowsX.fetchall()
+        senhaHash = user[0][2]
+        print(senhaHash)
 
         # Ensure username exists and password is correct
-        if len(rowsX) != 1 or not check_password_hash(rowsX[0]["hash"], request.form.get("password")):
+        if (rowsX.arraysize != 1) or not check_password_hash(senhaHash, request.form.get("password")):
             print('deu errado')
             return render_template('error.html',msg='Invalid username or passqord')
 
         # Remember which user has logged in
-        session["user_id"] = rowsX[0]["id"]
+        user_id = user[0][0]
+        session["user_id"] = user_id
 
         # Redirect user to home page
         flash("You Sucessfuly login")
@@ -71,3 +75,19 @@ def login():
     else:
 
         return render_template("login.html")
+
+@app.route('/clientes')
+@login_requireds
+def clients():
+    return render_template('clientes.html')
+
+
+@app.route('/cadastro')
+@login_requireds
+def cadastrar():
+
+    # check method
+    if request.method == 'POST':
+        return render_template('error.html',msg='Ainda por fazer')
+    else:
+        return render_template('cadastro.html')
