@@ -53,10 +53,10 @@ def login():
 
         # Query database for username
         rowsX = cur.execute("SELECT * FROM users WHERE username = ?", (request.form.get("username"),))
-        print(rowsX.arraysize)
+        # print(rowsX.arraysize)
         user = rowsX.fetchall()
         senhaHash = user[0][2]
-        print(senhaHash)
+        # print(senhaHash)
 
         # Ensure username exists and password is correct
         if (rowsX.arraysize != 1) or not check_password_hash(senhaHash, request.form.get("password")):
@@ -79,7 +79,14 @@ def login():
 @app.route('/clientes')
 @login_requireds
 def clients():
-    return render_template('clientes.html')
+
+    # Query database for clients
+    rows = cur.execute("SELECT * FROM clients")
+
+    clients = rows.fetchall()
+    # print(clients) 
+
+    return render_template('clientes.html',clients=clients)
 
 
 @app.route('/cadastro')
@@ -91,3 +98,21 @@ def cadastrar():
         return render_template('error.html',msg='Ainda por fazer')
     else:
         return render_template('cadastro.html')
+
+
+@app.route('/leiloes')
+@login_requireds
+def leiloes():
+    
+    # Query database for clients
+    rows = cur.execute("SELECT * FROM leiloes")
+
+    leiloes = rows.fetchall()
+    # print(clients)
+    #  
+    return render_template('leiloes.html',leiloes=leiloes)
+
+@app.route('/lotes')
+@login_requireds
+def lotes():
+    return render_template('lotes.html')
