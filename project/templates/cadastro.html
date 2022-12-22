@@ -5,14 +5,35 @@
 {% endblock %}
 
 {% block main %}
-    Página de Cadastro do Cliente
-    Nome
-    CPF/CNPJ 
-    E-mail 
-    Endereço 
-    Bairro 
-    Cidade
-    Estado 
-    inscrição Rural 
-    telefone 
+
+    <form action="/login" method="post">
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="clientName" name="clientName" placeholder="Nome" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="cpfCNPJ" name="cpfCNPJ" placeholder="CPF ou CNPJ" type="text">
+        </div>
+        <div class="mb-3">
+            <input size="40" autocomplete="off" autofocus class="form-control mx-auto w-auto" id="mail" name="mail" placeholder="e-mail" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="endereco" name="endereco" placeholder="Endereço" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="bairro" name="bairro" placeholder="Bairro" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="cidade" name="cidade" placeholder="Cidade" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="estado" name="estado" placeholder="Estado" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="telefone" name="telefone" placeholder="Telefone com DDD" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="inscRural" name="inscRural" placeholder="Inscrição Rural" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Cadastrar</button>
+    </form>
 {% endblock %}

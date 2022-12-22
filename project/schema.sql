@@ -1,7 +1,10 @@
 DROP TABLE IF EXISTS clients;
+DROP TABLE IF EXISTS leiloes;
+DROP TABLE IF EXISTS lotes;
+
 
 CREATE TABLE clients (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    clientId INTEGER PRIMARY KEY AUTOINCREMENT,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     nome VARCHAR(45) NOT NULL,
     doc VARCHAR(15) NOT NULL,
@@ -13,3 +16,35 @@ CREATE TABLE clients (
     inscRural VARCHAR(15) NOT NULL,
     tel VARCHAR(15) NOT NULL
 );
+
+CREATE TABLE leiloes (
+    leilaoId INTEGER PRIMARY KEY AUTOINCREMENT,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    dia DATE NOT NULL,
+    lugar TEXT NOT NULL,
+    leiloeiro TEXT NOT NULL,
+    qtdLotes INTEGER,
+    encerrado BOOLEAN DEFAULT FALSE,
+    vlrMov TEXT,
+    totalCom TEXT
+);
+
+CREATE TABLE lotes (
+    lotesId INTEGER PRIMARY KEY AUTOINCREMENT,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    sexo VARCHAR(1) NOT NULL,
+    raca VARCHAR(10) NOT NULL,
+    idade VARCHAR(10) NOT NULL,
+    qtd INTEGER NOT NULL,
+    leilao INTEGER,
+    vlrPedido VARCHAR(20),
+    vlrVendido VARCHAR(20),
+    comprador INTEGER,
+    vendedor INTEGER,
+    comissao VARCHAR(10),
+    FOREIGN KEY(leilao) REFERENCES leiloes(leilaoId),
+    FOREIGN KEY(comprador) REFERENCES clients(clientId),
+    FOREIGN KEY(vendedor) REFERENCES clients(clientId)
+    
+);
+
