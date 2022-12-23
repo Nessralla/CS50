@@ -22,18 +22,20 @@
             <th scope="col">Total Negociado</th>
             <th scope="col">Faturamento</th>
             <th scope="col">Encerrado</th>
+            <th scope="col">Opções</th>
           </tr>
         </thead>
         <tbody>
-          {% for client in clients %}
+          {% for leilao in leiloes %}
           <tr>
-            <th scope="row">{{client[0]}}</th>
-            <td>{{client[2]}}</td>
-            <td>{{client[4]}}</td>
-            <td>{{client[5]}}</td>
-            <td>{{client[7]}}</td>
-            <td>{{client[8]}}</td>
-            <td>{{client[6]}}</td>
+            <th scope="row">{{leilao[0]}}</th>
+            <td>{{leilao[2]}}</td>
+            <td>{{leilao[4]}}</td>
+            <td>{{leilao[5]}}</td>
+            <td>{{leilao[7]}}</td>
+            <td>{{leilao[8]}}</td>
+            <td>{{leilao[6]}}</td>
+            <td>Encerrar - Detalhes</td>
           </tr>
           {% endfor %}
         </tbody>

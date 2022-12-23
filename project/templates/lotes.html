@@ -5,5 +5,41 @@
 {% endblock %}
 
 {% block main %}
-    Fazer a página de lotes
+<div>
+    <button class="btn btn-primary" ><a style="text-decoration:none; color: #fff;"  href="./cadLote">Cadastrar Novo Lote</a></button>
+</div>
+<div class="w-80 p-3">
+
+    <!-- Tabela de Lotes -->
+
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Lote</th>
+            <th scope="col">Leilao</th>               
+            <th scope="col">Raça</th>
+            <th scope="col">Sexo</th>
+            <th scope="col">Idade</th>
+            <th scope="col">Quantidade</th>
+            <th scope="col">Comprador</th>
+            <th scope="col">Vendedor</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for lote in lotes %}
+          <tr>
+            <th scope="row">{{lote[0]}}</th>
+            <td>{{lote[6]}}</td>
+            <td>{{lote[3]}}</td>
+            <td>{{lote[2]}}</td>
+            <td>{{lote[4]}}</td>
+            <td>{{lote[5]}}</td>
+            <td>{{lote[9]}}</td>
+            <td>{{lote[10]}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+</div>
 {% endblock %}

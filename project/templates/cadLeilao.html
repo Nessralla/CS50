@@ -5,5 +5,17 @@
 {% endblock %}
 
 {% block main %}
-    Fazer a página de cadastro de leilões
+<form action="/login" method="post">
+    <div class="mb-3">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="dataLeilao" name="dataLeilao" placeholder="Data" type="date">
+    </div>
+    <div class="mb-3">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="leiloeiro" name="leiloeiro" placeholder="leiloeiro" type="text">
+    </div>
+    <div class="mb-3">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="local" name="local" placeholder="Local" type="text">
+    </div>
+
+    <button class="btn btn-primary" type="submit">Cadastrar</button>
+</form>
 {% endblock %}

@@ -109,10 +109,36 @@ def leiloes():
 
     leiloes = rows.fetchall()
     # print(clients)
-    #  
+      
     return render_template('leiloes.html',leiloes=leiloes)
+
+
+@app.route('/cadLeilao')
+@login_requireds
+def cadLeilao():
+
+    # check method
+    if request.method == 'POST':
+        return render_template('error.html',msg='Ainda por fazer')
+    else:
+        return render_template('cadLeilao.html')
 
 @app.route('/lotes')
 @login_requireds
 def lotes():
-    return render_template('lotes.html')
+
+    # Query database for lotes
+    rows = cur.execute("SELECT * FROM lotes")
+
+    lotes = rows.fetchall()
+    return render_template('lotes.html',lotes=lotes)
+
+@app.route('/cadLotes')
+@login_requireds
+def cadLotes():
+
+    # check method
+    if request.method == 'POST':
+        return render_template('error.html',msg='Ainda por fazer')
+    else:
+        return render_template('cadLotes.html')

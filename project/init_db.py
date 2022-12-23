@@ -15,6 +15,9 @@ cur.execute("INSERT INTO clients (nome,doc,mail,logradouro,bairro,cidade,estado,
 cur.execute("INSERT INTO leiloes (dia,lugar,leiloeiro,qtdLotes,encerrado,vlrMov,totalCom) VALUES (?,?,?,?,?,?,?)",
 ('2022-12-20','Estância Brasil', 'Rogério','0','FALSE','0','0'))
 
+cur.execute("INSERT INTO lotes (sexo,raca,idade,qtd,leilao,vlrPedido,vlrVendido,comprador,vendedor,comissao) VALUES (?,?,?,?,?,?,?,?,?,?)",
+            ('M','Nelore','36+','10','1','10000','8900','1','1','500'))
+
 
 connection.commit()
 connection.close()
