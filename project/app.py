@@ -89,13 +89,35 @@ def clients():
     return render_template('clientes.html',clients=clients)
 
 
-@app.route('/cadastro')
+@app.route('/cadastro', methods=["GET", "POST"])
 @login_requireds
 def cadastrar():
 
     # check method
     if request.method == 'POST':
-        return render_template('error.html',msg='Ainda por fazer')
+        nome = request.form.get('clientName')
+        doc = request.form.get('cpfCNPJ')
+        mail = request.form.get('mail')
+        ende = request.form.get('endereco')
+        bairro = request.form.get('bairro')
+        cidade = request.form.get('cidade')
+        estado = request.form.get('estado')
+        tel = request.form.get('telefone')
+        insc = request.form.get('inscRural')
+        # print(nome,doc,mail,ende,bairro,cidade,estado,tel,insc)
+
+       # Verify info
+
+       # Insert Data 
+        cur.execute("INSERT INTO clients (nome,doc,mail,logradouro,bairro,cidade,estado,inscRural,tel) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (nome,doc,mail,ende,bairro,cidade,estado,tel,insc)
+            )
+
+        connection.commit()
+
+        flash("Cliente Cadastrado com Sucesso")
+
+        return render_template('cadastro.html')
     else:
         return render_template('cadastro.html')
 
@@ -113,13 +135,27 @@ def leiloes():
     return render_template('leiloes.html',leiloes=leiloes)
 
 
-@app.route('/cadLeilao')
+@app.route('/cadLeilao', methods=["GET", "POST"])
 @login_requireds
 def cadLeilao():
 
     # check method
     if request.method == 'POST':
-        return render_template('error.html',msg='Ainda por fazer')
+        data = request.form.get('dataLeilao')
+        leiloeiro = request.form.get('leiloeiro')
+        local = request.form.get('local')
+
+        # Verify data
+
+        # Insert Data 
+        cur.execute("INSERT INTO leiloes (dia,lugar,leiloeiro) VALUES (?,?,?)",
+        (data,local,leiloeiro))
+
+        connection.commit()
+
+        flash("Leilão Cadastrado com Sucesso")
+
+        return render_template('cadLeilao.html')
     else:
         return render_template('cadLeilao.html')
 
@@ -129,16 +165,48 @@ def lotes():
 
     # Query database for lotes
     rows = cur.execute("SELECT * FROM lotes")
-
     lotes = rows.fetchall()
-    return render_template('lotes.html',lotes=lotes)
 
-@app.route('/cadLotes')
+    # Query DB for clients
+    clientsObj = (cur.execute("SELECT clientId,nome FROM clients"))
+    clientsList = clientsObj.fetchall()
+    # print(clients)
+    clients = dict()
+    for client in clientsList:
+        # print(client)       
+        k = client[0]
+        v = client[1]
+        # print(k,v)
+        clients[k] = v
+        # print(clients)
+    return render_template('lotes.html',lotes=lotes,clients=clients)
+
+@app.route('/cadLotes', methods=["GET", "POST"])
 @login_requireds
 def cadLotes():
 
     # check method
     if request.method == 'POST':
+
         return render_template('error.html',msg='Ainda por fazer')
     else:
+        # Query database for lotes
+        rows = cur.execute("SELECT dia FROM leiloes WHERE encerrado = 'NAO'")
+        # print(rows.fetchall())
+        lotes = rows.fetchall()
+
+        # Query DB for clients
+        clientsObj = (cur.execute("SELECT clientId,nome FROM clients"))
+        clientsList = clientsObj.fetchall()
+        # print(clients)
+
+        # transform Data into dict
+        clients = dict()
+        for client in clientsList:
+            # print(client)       
+            k = client[0]
+            v = client[1]
+            # print(k,v)
+            clients[k] = v
+            # print(clients)
         return render_template('cadLotes.html')
