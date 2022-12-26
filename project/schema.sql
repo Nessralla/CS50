@@ -23,10 +23,10 @@ CREATE TABLE leiloes (
     dia DATE NOT NULL,
     lugar TEXT NOT NULL,
     leiloeiro TEXT NOT NULL,
-    qtdLotes INTEGER,
-    encerrado BOOLEAN DEFAULT FALSE,
-    vlrMov TEXT,
-    totalCom TEXT
+    qtdLotes INTEGER DEFAULT 0,
+    encerrado TEXT DEFAULT 'NAO',
+    vlrMov TEXT DEFAULT 0,
+    totalCom TEXT DEFAULT 0
 );
 
 CREATE TABLE lotes (
@@ -44,7 +44,6 @@ CREATE TABLE lotes (
     comissao VARCHAR(10),
     FOREIGN KEY(leilao) REFERENCES leiloes(leilaoId),
     FOREIGN KEY(comprador) REFERENCES clients(clientId),
-    FOREIGN KEY(vendedor) REFERENCES clients(clientId)
-    
+    FOREIGN KEY(vendedor) REFERENCES clients(clientId)    
 );
 
