@@ -144,10 +144,12 @@ def leiloes():
         totalNegociado = (cur.execute("SELECT SUM(vlrVendido) FROM lotes WHERE leilao = ?",leilaoAtivo)).fetchall()
         totalComissoes = (cur.execute("SELECT SUM(comissao) FROM lotes WHERE leilao = ?",leilaoAtivo)).fetchall()
 
-        print(totalComissoes[0],totalLotes[0],totalNegociado[0])
+        print(totalComissoes[0][0],totalLotes[0][0],totalNegociado[0][0])
 
+        # inserir na base dos leiloes os valores obtidos
+        cur.execute("INSERT into leiloes (qtdLotes,vlrMov,totalCom) VALUES (?,?,?)",(totalLotes[0][0],totalNegociado[0][0],totalComissoes[0][0]))
 
-
+        connection.commit()
       
     return render_template('leiloes.html',leiloes=leiloes)
 
