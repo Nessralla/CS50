@@ -16,13 +16,14 @@
         <thead>
           <tr>
             <th scope="col">Lote</th>
-            <th scope="col">Leilao</th>               
+            <th scope="col">Cod. Leilao</th>               
             <th scope="col">Raça</th>
             <th scope="col">Sexo</th>
             <th scope="col">Idade</th>
             <th scope="col">Quantidade</th>
             <th scope="col">Comprador</th>
             <th scope="col">Vendedor</th>
+            <th scope="col">Opções</th>
           </tr>
         </thead>
         <tbody>
@@ -36,6 +37,7 @@
             <td>{{lote[5]}}</td>
             <td>{{clients[lote[9]]}}</td>
             <td>{{clients[lote[10]]}}</td>
+            <td> Detalhes </td>
           </tr>
           {% endfor %}
         </tbody>

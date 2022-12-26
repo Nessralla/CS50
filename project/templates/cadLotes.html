@@ -7,7 +7,13 @@
 {% block main %}
 <form action="/cadLotes" method="post">
     <div class="mb-3">
-        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="leilao" name="leilao" placeholder="Leilão" type="text">
+        Data do Leilão:
+        <select autofocus class="form-control mx-auto w-auto" name="leilao" id="leilao">
+            {% for leilao in leiloes %}
+            <option value="{{leilao[0]}}">{{leilao[0]}}: {{leilao[1]}}</option>
+            {% endfor %}
+        </select>
+            
     </div>
 
     <div class="mb-3">
@@ -51,13 +57,13 @@
         <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="valorPedido" name="valorPedido" placeholder="Valor do Lote" type="text">
     </div>
     <div class="mb-3">
-        <select name="vendedor" id="vendedor">
-            {% for client in clients %}
-            <option value="{{client}}">{{client}}</option>
+        Vendedor:
+        <select autofocus class="form-control mx-auto w-auto" name="vendedor" id="vendedor">
+            {% for client in clientsList %}
+            <option value="{{client[0]}}">{{client[0]}} {{client[1]}}</option>
             {% endfor %}
         </select>
             
-        
     </div>
     <button class="btn btn-primary" type="submit">Cadastrar</button>
 </form>

@@ -126,11 +126,28 @@ def cadastrar():
 @login_requireds
 def leiloes():
     
-    # Query database for clients
+    # Query database for leiloes
     rows = cur.execute("SELECT * FROM leiloes")
 
     leiloes = rows.fetchall()
-    # print(clients)
+
+    # update qtdLotes, vlrMov e totalCom na tabela leiloes com as informações dos lotes dos leilões não encerrados
+    objeto = cur.execute("SELECT leilaoId FROM leiloes WHERE encerrado = 'NAO'")
+    leiloesAtivos = objeto.fetchall()
+
+    for leilaoAtivo in leiloesAtivos:
+        # Cada leilaoAtivo é uma tupla
+        # print(leilaoAtivo)
+
+        # Retornar a soma dos lotes, do total negociado e das comissoes para armazenar na base
+        totalLotes = (cur.execute("SELECT COUNT(lotesId) FROM lotes WHERE leilao = ?",leilaoAtivo)).fetchall()
+        totalNegociado = (cur.execute("SELECT SUM(vlrVendido) FROM lotes WHERE leilao = ?",leilaoAtivo)).fetchall()
+        totalComissoes = (cur.execute("SELECT SUM(comissao) FROM lotes WHERE leilao = ?",leilaoAtivo)).fetchall()
+
+        print(totalComissoes[0],totalLotes[0],totalNegociado[0])
+
+
+
       
     return render_template('leiloes.html',leiloes=leiloes)
 
@@ -187,26 +204,35 @@ def cadLotes():
 
     # check method
     if request.method == 'POST':
+        idLeilao = request.form.get('leilao')
+        sexo = request.form.get('sexo')
+        raca = request.form.get('raca')
+        idade = request.form.get('idade')
+        qtd = request.form.get('qtd')
+        vlrPedido = request.form.get('valorPedido')
+        vendedor = request.form.get('vendedor')
+        # print(idLeilao,sexo,raca,idade,qtd,vlrPedido,vendedor)
 
-        return render_template('error.html',msg='Ainda por fazer')
+        # Verify info
+
+        # insert data
+        cur.execute("INSERT INTO lotes (sexo,raca,idade,qtd,leilao,vlrPedido,vendedor) VALUES (?,?,?,?,?,?,?)",
+            (sexo,raca,idade,qtd,idLeilao,vlrPedido,vendedor))
+
+        connection.commit()
+
+        flash("Lote Cadastrado com Sucesso")
+
+        return render_template('cadLotes.html')
     else:
         # Query database for lotes
-        rows = cur.execute("SELECT dia FROM leiloes WHERE encerrado = 'NAO'")
-        # print(rows.fetchall())
-        lotes = rows.fetchall()
+        rows = cur.execute("SELECT leilaoId,dia FROM leiloes WHERE encerrado = 'NAO'")
+        leiloes = rows.fetchall()
+        # print(leiloes)
 
         # Query DB for clients
         clientsObj = (cur.execute("SELECT clientId,nome FROM clients"))
         clientsList = clientsObj.fetchall()
-        # print(clients)
+        # print(clientsList)
 
-        # transform Data into dict
-        clients = dict()
-        for client in clientsList:
-            # print(client)       
-            k = client[0]
-            v = client[1]
-            # print(k,v)
-            clients[k] = v
-            # print(clients)
-        return render_template('cadLotes.html')
+        return render_template('cadLotes.html',leiloes=leiloes,clientsList=clientsList)

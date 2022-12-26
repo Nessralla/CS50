@@ -14,7 +14,8 @@ CREATE TABLE clients (
     cidade VARCHAR(20) NOT NULL,
     estado VARCHAR(2) NOT NULL,
     inscRural VARCHAR(15) NOT NULL,
-    tel VARCHAR(15) NOT NULL
+    tel VARCHAR(15) NOT NULL,
+    com VARCHAR (2) NOT NULL DEFAULT 2
 );
 
 CREATE TABLE leiloes (
