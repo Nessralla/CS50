@@ -37,7 +37,11 @@
             <td>{{lote[5]}}</td>
             <td>{{clients[lote[9]]}}</td>
             <td>{{clients[lote[10]]}}</td>
-            <td> Detalhes </td>
+            <td> 
+              <form action="./loteDetail" method="post">
+                <button name="detalheLote" id="detalheLote" class="btn" value="{{lote[0]}}">Detalhes</button>
+              </form>  
+            </td>
           </tr>
           {% endfor %}
         </tbody>
