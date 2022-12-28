@@ -130,7 +130,27 @@ def cadastrar():
 @app.route('/clientDetail',methods=['POST'])
 @login_requireds
 def clientDetail():
-    return render_template('clientDetail.html')
+
+    idCliente = request.form.get('detalheClient')
+
+    row = cur.execute("SELECT * FROM clients WHERE clientId = ?",idCliente)
+    cliente = row.fetchall()[0]
+    # print(cliente[0][0])
+
+    compradosObj = cur.execute("SELECT SUM(vlrVendido),COUNT(vlrVendido) FROM lotes WHERE comprador = ?",(cliente[0],))
+    # print(compradosObj.fetchall())
+    comprados = compradosObj.fetchall()
+
+    vendidosObj = cur.execute("SELECT SUM(vlrVendido),COUNT(vlrVendido) FROM lotes WHERE vendedor = ?",(cliente[0],))
+    # print(vendidosObj.fetchall())
+    vendidos = vendidosObj.fetchall()
+
+
+    #print(comprados,vendidos)
+
+
+
+    return render_template('clientDetail.html',cliente=cliente,comprados=comprados,vendidos=vendidos)
 
 
 # EXIBIÇÃO DE LEILAO, CADASTRO, DETALHES E ALTERAÇÕES
@@ -205,10 +225,47 @@ def cadLeilao():
         return render_template('cadLeilao.html')
 
 
-@app.route('/leilaoDetail',methods="[POST]")
+@app.route('/leilaoDetail',methods=["POST"])
 @login_requireds
 def leilaoDetail():
-    return render_template('leilaoDetail.html')
+
+    # id do leilao selecionado
+    idLeilao = request.form.get('detalheLeilao')
+    # print(idLeilao)
+    
+    # retornar dict com clientes
+
+    # Query DB for clients
+    clientsObj = (cur.execute("SELECT clientId,nome FROM clients"))
+    clientsList = clientsObj.fetchall()
+    # print(clients)
+    clients = dict()
+    for client in clientsList:
+        # print(client)       
+        k = client[0]
+        v = client[1]
+        clients[k] = v
+    #print(clients)
+
+    # retornar info de todos os lotes do leilao
+
+    rows = cur.execute("SELECT * from lotes WHERE leilao = ?",(idLeilao,))
+    lotesDoLeilao = rows.fetchall()
+    # print(lotesDoLeilao)
+
+
+    # soma dos valores vendidos, soma das comissões, total de lotes
+    totalNegociado = 0
+    totalComissoes = 0
+    totalLotes = len(lotesDoLeilao)
+
+    for lote in lotesDoLeilao:
+        totalComissoes += int(lote[11])
+        totalNegociado += int(lote[8])
+
+    infos = totalNegociado,totalComissoes,totalLotes
+    
+    return render_template('leilaoDetail.html',lotesDoLeilao=lotesDoLeilao,clients=clients,infos=infos)
 
 
 
@@ -276,6 +333,8 @@ def cadLotes():
 
         return render_template('cadLotes.html',leiloes=leiloes,clientsList=clientsList)
 
+
+
 @app.route('/loteDetail', methods=["POST"])
 @login_requireds
 def loteDetail():
@@ -308,3 +367,32 @@ def loteDetail():
     
 
     return render_template('loteDetail.html',loteInfo=loteInfo,dataLeilao=dataLeilao, comprador=comprador,vendedor=vendedor)
+
+
+@app.route('/relatorios',methods = ['GET','POST'])
+@login_requireds
+def relatorios():
+
+    # check method
+    if request.method == 'POST':
+
+
+
+
+        return render_template('resultado.html')
+
+    # return all id from clients
+    clientObj = cur.execute("SELECT clientId FROM clients")
+    clientesId = clientObj.fetchall(0)
+
+    # return all lotesId from lotes
+    lotesObj = cur.execute("SELECT lotesId FROM lotes")
+    lotesId = lotesObj.fetchall(0)
+
+    # return all leiloesId from leiloes
+    leilaoObj = cur.execute("SELECT leilaoId FROM leiloes")
+    leiloesId = leilaoObj.fetchall()
+
+    print(clientesId,lotesId,leiloesId)
+
+    return render_template('relatorios.html',clientesId=clientesId,lotesId=lotesId,leiloesId=leiloesId)

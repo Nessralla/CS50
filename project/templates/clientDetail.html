@@ -5,5 +5,95 @@
 {% endblock %}
 
 {% block main %}
-    Fazer detalhe do client
+<div class="w-80 p-3">
+
+    <!-- RESUMO LEILÃO -->
+
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Total Compras</th>
+            <th scope="col">Lotes Comprados</th>               
+            <th scope="col"> Total Vendas </th>
+            <th scope="col"> Lotes Vendidos </th>
+            <th scope="col"> Opções</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td>{{"R$ %.2f"|format(comprados[0][0]|float)}}</td>
+            <td>{{comprados[0][1]}}</td>
+            <td>{{"R$ %.2f"|format(vendidos[0][0]|float)}}</td>
+            <td>{{vendidos[0][1]}}</td>
+            <td> - </td>
+            </tr>
+          
+        </tbody>
+      </table>
+
+</div>
+
+<div class="w-80 p-3">
+
+    <!-- Detalhes Cliente 1 -->
+
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Data Criação</th>               
+            <th scope="col">Nome</th>
+            <th scope="col"> Documento</th>
+            <th scope="col">E-mail</th>
+            <th scope="col">Telefone</th>
+            <th scope="col">Inscrição Rural</th>
+            <th scope="col">Comissão</th>
+          </tr>
+        </thead>
+        <tbody>
+           
+          <tr>
+            {% for i in range(5)%}
+            <td>{{cliente[i]}}</td>
+            {% endfor %}
+            <td>{{cliente[10]}}</td>
+            <td>{{cliente[9]}}</td>
+            <td>{{"%.2f  %%"|format(cliente[11]|float)}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+
+</div>
+
+<div class="w-80 p-3">
+
+    <!-- Detalhe Lote 2 -->
+
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Logradouro</th>
+            <th scope="col">Cidade</th>               
+            <th scope="col"> Bairro </th>
+            <th scope="col"> Estado </th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            {% for i in range(5,9)%}
+            <td>{{cliente[i]}}</td>
+            {% endfor %}
+
+            </tr>
+          
+        </tbody>
+      </table>
+
+</div>
+
 {% endblock %}

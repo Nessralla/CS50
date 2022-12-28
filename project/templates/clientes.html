@@ -32,7 +32,11 @@
                 <td>{{client[3]}}</td>
                 <td>{{client[4]}}</td>
                 <td>{{client[10]}}</td>
-                <td> Editar - Detalhes </td>
+                <td> 
+                  <form action="./clientDetail" method="post">
+                    <button name="detalheClient" id="detalheCliente" class="btn" value="{{client[0]}}">Detalhes</button>
+                  </form>  
+                </td>
               </tr>
               {% endfor %}
             </tbody>
