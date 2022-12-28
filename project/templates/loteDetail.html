@@ -5,5 +5,66 @@
 {% endblock %}
 
 {% block main %}
-    Fazer detalhes do lote
+<div class="w-80 p-3">
+
+    <!-- Detalhe Lote 1 -->
+
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Data Criação</th>               
+            <th scope="col"> Comprador </th>
+            <th scope="col"> Vendedor </th>
+            <th scope="col">Leilao</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td>{{loteInfo[0]}}</td>
+            <td>{{loteInfo[1]}}</td>
+            <td>{{comprador[0][0]}}</td>
+            <td>{{vendedor[0][0]}}</td>
+            <td>{{dataLeilao[0][0]}}</td>
+            </tr>
+          
+        </tbody>
+      </table>
+
+</div>
+
+<div class="w-80 p-3">
+
+    <!-- Detalha Lote 2 -->
+
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Raça</th>
+            <th scope="col">Sexo</th>               
+            <th scope="col">Idade</th>
+            <th scope="col">Quantidade</th>
+            <th scope="col">Valor Pedido</th>
+            <th scope="col">Valor Negociado</th>
+            <th scope="col">Comissão</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td>{{loteInfo[3]}}</td>
+            <td>{{loteInfo[2]}}</td>
+            <td>{{loteInfo[4]}}</td>
+            <td>{{loteInfo[5]}}</td>
+            <td>{{"R$ %.2f"|format(loteInfo[7]|float)}}</td>
+            <td>{{"R$ %.2f"|format(loteInfo[8]|float)}}</td>
+            <td>{{"R$ %.2f"|format(loteInfo[-1]|float)}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+
+</div>
 {% endblock %}

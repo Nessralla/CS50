@@ -33,6 +33,8 @@ Session(app)
 def index():
     return render_template("index.html")
 
+# LOGIN E LOGOUT
+
 @app.route('/login',methods=['GET','POST'])
 def login():
     
@@ -68,13 +70,16 @@ def login():
         session["user_id"] = user_id
 
         # Redirect user to home page
-        flash("You Sucessfuly login")
+        flash("You Sucessfuly login",'alert-primary')
         return redirect("/")    
 
 
     else:
 
         return render_template("login.html")
+
+
+# EXIBIÇÃO DE CLIENTES, CADASTRO, DETALHES E ALTERAÇÕES
 
 @app.route('/clientes')
 @login_requireds
@@ -115,11 +120,20 @@ def cadastrar():
 
         connection.commit()
 
-        flash("Cliente Cadastrado com Sucesso")
+        flash("Cliente Cadastrado com Sucesso",'alert-primary')
 
         return render_template('cadastro.html')
     else:
         return render_template('cadastro.html')
+
+
+@app.route('/clientDetail',methods=['POST'])
+@login_requireds
+def clientDetail():
+    return render_template('clientDetail.html')
+
+
+# EXIBIÇÃO DE LEILAO, CADASTRO, DETALHES E ALTERAÇÕES
 
 
 @app.route('/leiloes')
@@ -165,6 +179,18 @@ def cadLeilao():
         local = request.form.get('local')
 
         # Verify data
+        if not data:
+            flash('Campo data deve ser preenchido','alert-danger')
+            return render_template('cadLeilao.html')
+
+        if not leiloeiro:
+            flash('Campo Leiloeiro deve ser preenchido','alert-danger')
+            return render_template('cadLeilao.html')
+
+        if not local:
+            flash('Campo local deve ser preenchido','alert-danger')
+            return render_template('cadLeilao.html')
+
 
         # Insert Data 
         cur.execute("INSERT INTO leiloes (dia,lugar,leiloeiro) VALUES (?,?,?)",
@@ -172,11 +198,22 @@ def cadLeilao():
 
         connection.commit()
 
-        flash("Leilão Cadastrado com Sucesso")
+        flash("Leilão Cadastrado com Sucesso",'alert-primary')
 
         return render_template('cadLeilao.html')
     else:
         return render_template('cadLeilao.html')
+
+
+@app.route('/leilaoDetail',methods="[POST]")
+@login_requireds
+def leilaoDetail():
+    return render_template('leilaoDetail.html')
+
+
+
+# EXIBIÇÃO DE LOTES, CADASTRO, DETALHES E ALTERAÇÕES
+
 
 @app.route('/lotes')
 @login_requireds
@@ -223,7 +260,7 @@ def cadLotes():
 
         connection.commit()
 
-        flash("Lote Cadastrado com Sucesso")
+        flash("Lote Cadastrado com Sucesso",'alert-primary')
 
         return render_template('cadLotes.html')
     else:
@@ -239,18 +276,35 @@ def cadLotes():
 
         return render_template('cadLotes.html',leiloes=leiloes,clientsList=clientsList)
 
-@app.route('/loteDetail')
+@app.route('/loteDetail', methods=["POST"])
 @login_requireds
-def clients():
+def loteDetail():
 
     # id from detail lote
     lote = request.form.get('detalheLote')
-    print(lote)
+    # print(lote)
 
     # Query database for lote selecionado
-    rows = cur.execute("SELECT * FROM lotes WHERE loteId = ?",lote)
+    rows = cur.execute("SELECT * FROM lotes WHERE lotesId = ?",lote)
 
-    infoLote = rows.fetchall()
-    print(infoLote) 
+    loteInfo = (rows.fetchall())[0]
+    # print(loteInfo) 
 
-    return render_template('clientes.html',infoLote=infoLote)
+    idLeilao = loteInfo[0]
+    compradorId = loteInfo[-3]
+    vendedorId = loteInfo[-2]
+
+    # print(idLeilao,compradorId,vendedorId)
+
+    # query db for data leilao
+    dataLeilao = (cur.execute("SELECT dia FROM leiloes WHERE leilaoId = ?",(idLeilao,))).fetchall()
+    # print(dataLeilao)
+
+    # query db for comprador e vendedor
+    comprador = (cur.execute("SELECT nome FROM clients WHERE clientId = ?",(compradorId,))).fetchall()
+    vendedor = (cur.execute("SELECT nome FROM clients WHERE clientId = ?",(vendedorId,))).fetchall()
+
+    # print(comprador,vendedor)
+    
+
+    return render_template('loteDetail.html',loteInfo=loteInfo,dataLeilao=dataLeilao, comprador=comprador,vendedor=vendedor)

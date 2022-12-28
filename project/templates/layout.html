@@ -35,13 +35,20 @@
     </nav>
 
 
+    <!-- Este cógigo permite usar o segundo parameto do flashing para atribuir categorias as mensagens, que neste código
+    são classes do bootstrap -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
     {% if get_flashed_messages() %}
     <header>
-        <div class="alert alert-primary mb-0 text-center" role="alert">
+        {% for category, message in messages %}
+        <div class="alert {{category}} mb-0 text-center " role="alert">
             {{ get_flashed_messages() | join(" ") }}
         </div>
+        {% endfor %}
+        
     </header>
     {% endif %}
+    {% endwith %}
 
     <main class="container-fluid py-5 text-center">
         {% block main %}{% endblock %}
