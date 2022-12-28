@@ -9,24 +9,27 @@
 <div class="alert alert-primary mb-0 text-center " role="alert">
     RELATÓRIOS
 </div>
-<form action="/cadLotes" method="post">
+<form action="/relatorios" method="post">
     <div class="mb-3">
         Consultar lote:
-        <select autofocus class="form-control mx-auto w-auto" name="lote" id="lote">
+        <select autofocus class="form-control mx-auto w-auto" name="lote" id="lote" dafault="0">
+            <option disabled selected value> -- select an option -- </option>
             {% for lote in lotesId %}
             <option value="{{lote[0]}}">{{lote[0]}}</option>
             {% endfor %}
         </select>
 
         Consultar leilão:
-        <select autofocus class="form-control mx-auto w-auto" name="lote" id="lote">
+        <select autofocus class="form-control mx-auto w-auto" name="leilao" id="leilao">
+            <option disabled selected value> -- select an option -- </option>
             {% for leilao in leiloesId %}
             <option value="{{leilao[0]}}">{{leilao[0]}}</option>
             {% endfor %}
         </select>
 
         Consultar clientes:
-        <select autofocus class="form-control mx-auto w-auto" name="lote" id="lote">
+        <select autofocus class="form-control mx-auto w-auto" name="cliente" id="cliente">
+            <option disabled selected value> -- select an option -- </option>
             {% for cliente in clientesId %}
             <option value="{{cliente[0]}}">{{cliente[0]}}</option>
             {% endfor %}

@@ -376,23 +376,112 @@ def relatorios():
     # check method
     if request.method == 'POST':
 
+        if request.form.get('lote'):
+            # Query database for lote selecionado
+            rows = cur.execute("SELECT * FROM lotes WHERE lotesId = ?",request.form.get('lote'))
+
+            loteInfo = (rows.fetchall())[0]
+            # print(loteInfo) 
+
+            idLeilao = loteInfo[0]
+            compradorId = loteInfo[-3]
+            vendedorId = loteInfo[-2]
+
+            # print(idLeilao,compradorId,vendedorId)
+
+            # query db for data leilao
+            dataLeilao = (cur.execute("SELECT dia FROM leiloes WHERE leilaoId = ?",(idLeilao,))).fetchall()
+            # print(dataLeilao)
+
+            # query db for comprador e vendedor
+            comprador = (cur.execute("SELECT nome FROM clients WHERE clientId = ?",(compradorId,))).fetchall()
+            vendedor = (cur.execute("SELECT nome FROM clients WHERE clientId = ?",(vendedorId,))).fetchall()
+
+            # print(comprador,vendedor)
+            
+
+            return render_template('loteDetail.html',loteInfo=loteInfo,dataLeilao=dataLeilao, comprador=comprador,vendedor=vendedor)
+
+
+        if request.form.get('leilao'):
+            # id do leilao selecionado
+            idLeilao = request.form.get('leilao')
+            # print(idLeilao)
+            
+            # retornar dict com clientes
+
+            # Query DB for clients
+            clientsObj = (cur.execute("SELECT clientId,nome FROM clients"))
+            clientsList = clientsObj.fetchall()
+            # print(clients)
+            clients = dict()
+            for client in clientsList:
+                # print(client)       
+                k = client[0]
+                v = client[1]
+                clients[k] = v
+            #print(clients)
+
+            # retornar info de todos os lotes do leilao
+
+            rows = cur.execute("SELECT * from lotes WHERE leilao = ?",(idLeilao,))
+            lotesDoLeilao = rows.fetchall()
+            # print(lotesDoLeilao)
+
+
+            # soma dos valores vendidos, soma das comissões, total de lotes
+            totalNegociado = 0
+            totalComissoes = 0
+            totalLotes = len(lotesDoLeilao)
+
+            for lote in lotesDoLeilao:
+                totalComissoes += int(lote[11])
+                totalNegociado += int(lote[8])
+
+            infos = totalNegociado,totalComissoes,totalLotes
+            
+            return render_template('leilaoDetail.html',lotesDoLeilao=lotesDoLeilao,clients=clients,infos=infos)
+
+
+        if request.form.get('cliente'):
+            idCliente = request.form.get('cliente')
+
+            row = cur.execute("SELECT * FROM clients WHERE clientId = ?",idCliente)
+            cliente = row.fetchall()[0]
+            # print(cliente[0][0])
+
+            compradosObj = cur.execute("SELECT SUM(vlrVendido),COUNT(vlrVendido) FROM lotes WHERE comprador = ?",(cliente[0],))
+            # print(compradosObj.fetchall())
+            comprados = compradosObj.fetchall()
+
+            vendidosObj = cur.execute("SELECT SUM(vlrVendido),COUNT(vlrVendido) FROM lotes WHERE vendedor = ?",(cliente[0],))
+            # print(vendidosObj.fetchall())
+            vendidos = vendidosObj.fetchall()
+
+
+            #print(comprados,vendidos)
 
 
 
-        return render_template('resultado.html')
+            return render_template('clientDetail.html',cliente=cliente,comprados=comprados,vendidos=vendidos)
+
+
+        flash('Um lote, leilao ou cliente devem ser escolhidos','alert-danger')
+
+        return render_template("relatorios.html")
 
     # return all id from clients
     clientObj = cur.execute("SELECT clientId FROM clients")
-    clientesId = clientObj.fetchall(0)
+    clientesId = clientObj.fetchall()
 
     # return all lotesId from lotes
     lotesObj = cur.execute("SELECT lotesId FROM lotes")
-    lotesId = lotesObj.fetchall(0)
+    lotesId = lotesObj.fetchall()
 
     # return all leiloesId from leiloes
     leilaoObj = cur.execute("SELECT leilaoId FROM leiloes")
     leiloesId = leilaoObj.fetchall()
 
-    print(clientesId,lotesId,leiloesId)
+    # print(clientesId,lotesId,leiloesId)
 
     return render_template('relatorios.html',clientesId=clientesId,lotesId=lotesId,leiloesId=leiloesId)
